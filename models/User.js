@@ -13,7 +13,6 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
   },
   subscribers: {
     type: Number,
@@ -23,6 +22,10 @@ const UserSchema = new mongoose.Schema({
     type: [String],
     // default: [],
   },
+  fromGoogle: {
+    type: Boolean,
+    default: false,
+  }
 },
   {
     timestamps: true

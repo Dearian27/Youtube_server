@@ -11,7 +11,7 @@ router.put("/:id", verifyToken, updateUser)
 router.delete("/:id", verifyToken, deleteUser)
 
 // Get the user
-router.post("/:id", getUser)
+router.get("/:id", getUser)
 
 // Subscribe the user
 router.put("/subscribe/:id", verifyToken, subscribe)

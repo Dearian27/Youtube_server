@@ -34,12 +34,12 @@ export const signUp = async (req, res, next) => {
 
 export const signIn = async (req, res, next) => {
   try {
-    const { name, password } = req.body;
-    if (!name || !password) {
+    const { email, password } = req.body;
+    if (!email || !password) {
       return res.status(400).json({ error: 'Please provide name and password' });
     }
 
-    const user = await User.findOne({ name });
+    const user = await User.findOne({ email });
     if (!user) {
       return next(createError(404, "not found"));
     }
@@ -58,6 +58,35 @@ export const signIn = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+}
 
-  // const token = req.body.token
+export const signInGoogle = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email:req.body.email, name:req.body.name});
+    if(user) {
+      const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
+      
+      res.cookie("access_token", token, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json(user._doc);
+    } else {
+      const newUser = new User({
+        ...req.body,
+        fromGoogle: true,
+      })
+      const savedUser = await newUser.save();
+
+      
+      const token = jwt.sign({ id: savedUser._id }, process.env.SECRET_KEY);
+      res.cookie("access_token", token, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json(savedUser._doc);
+    }
+  }catch(error) {
+    next(error)
+  }
 }
