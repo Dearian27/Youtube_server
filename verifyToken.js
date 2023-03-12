@@ -9,6 +9,7 @@ export const verifyToken = (req, res, next) => {
     if (err) return next(createError(403, "Token verification failed"));
     req.user = user;
     console.log("Token verified")
+    console.log("req.user", req.user)
     next();
   })
 

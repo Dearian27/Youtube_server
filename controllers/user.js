@@ -87,10 +87,18 @@ export const like = async (req, res, next) => {
   const id = req.user.id;
   const videoId = req.params.id;
   try {
-    await Video.findByIdAndUpdate(videoId, {
-      $addToSet: { likes: id },
-      $pull: { dislikes: id }
-    })
+    // const video = Video.findById(videoId);
+    // console.log(video);
+    // if(video.likes.includes(id)) {   
+      // await Video.findByIdAndUpdate(videoId, {
+        // $pull: { likes: id }
+      // })
+    // } else {
+      await Video.findByIdAndUpdate(videoId, {
+        $addToSet: { likes: id },
+        $pull: { dislikes: id }
+      })
+    // }
     res.status(200).json("Liked successfull");
   } catch (error) {
     next(error)

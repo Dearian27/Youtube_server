@@ -19,10 +19,10 @@ const connect = () => {
   })
 }
 mongoose.set('strictQuery', false);
+app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
 
-app.use(cookieParser());
 app.use('/api/users', userRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/videos', videoRoute);
