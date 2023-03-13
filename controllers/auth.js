@@ -36,7 +36,7 @@ export const signUp = async (req, res, next) => {
     )
 
     res.status(200).json({
-      token, message: "user has been created"
+      token, user, message: "user has been created"
     })
 
   } catch (error) {
@@ -74,7 +74,7 @@ export const signIn = async (req, res, next) => {
     )
       console.log(token)
     res.status(200).json({
-      token
+      token, user
     })
 
     // const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
@@ -118,7 +118,7 @@ export const signInGoogle = async (req, res, next) => {
       )
   
       res.status(200).json({
-        token
+        token, user
       })
       // const token = jwt.sign({ id: savedUser._id }, process.env.SECRET_KEY);
       // res.cookie("access_token", token, {
