@@ -3,7 +3,7 @@ import User from '../models/User.js';
 import Video from '../models/Video.js';
 
 export const updateUser = async (req, res, next) => {
-  if (req.params.id === req.user.id) {
+  if (req.params.id === req.user._id) {
     try {
       const updatedUser = await User.findByIdAndUpdate(req.user.id,
         { $set: req.body },
@@ -25,7 +25,7 @@ export const updateUser = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
   if (req.params.id === req.user.id) {
     try {
-      await User.findByIdAndDelete(req.user.id);
+      await User.findByIdAndDelete(req.user._id);
       res.status(200).json({ message: "User has been deleted" });
     }
     catch (err) {
@@ -51,7 +51,7 @@ export const getUser = async (req, res, next) => {
 
 export const subscribe = async (req, res, next) => {
   try {
-    const subscribedUser = await User.findById(req.user.id);
+    const subscribedUser = await User.findById(req.user._id);
     const isSubscribed = subscribedUser?.subscribedUsers?.find(user => user === req.params.id);
     if (isSubscribed || req.user.id === req.params.id) {
       //? cannot subscribe to yourself or secondly
@@ -84,6 +84,8 @@ export const unsubscribe = async (req, res, next) => {
 }
 
 export const like = async (req, res, next) => {
+  console.log(req.user);
+  console.log(req.user.id);
   const id = req.user.id;
   const videoId = req.params.id;
   try {
@@ -94,12 +96,15 @@ export const like = async (req, res, next) => {
         // $pull: { likes: id }
       // })
     // } else {
+      
       await Video.findByIdAndUpdate(videoId, {
         $addToSet: { likes: id },
         $pull: { dislikes: id }
       })
-    // }
-    res.status(200).json("Liked successfull");
+      // }
+      console.log("LIKING SUCCESS")
+    res.status(200)
+    // .json("liked successfull");
   } catch (error) {
     next(error)
   }
@@ -114,7 +119,8 @@ export const dislike = async (req, res, next) => {
       $addToSet: { dislikes: id },
       $pull: { likes: id }
     })
-    res.status(200).json("Disliked successfull");
+    res.status(200)
+    // .json("disliked successfull");
   } catch (error) {
     next(error)
   }

@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 const app = express();
+app.use(cors());
 dotenv.config();
 
 const connect = () => {
@@ -18,15 +19,15 @@ const connect = () => {
     throw err;
   })
 }
-mongoose.set('strictQuery', false);
+mongoose.set('strictQuery', true);
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
 
 app.use('/api/users', userRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/videos', videoRoute);
 app.use('/api/auth', authRoute);
+
 app.use((error, req, res, next) => {
   const status = error.status || 500;
   const message = error.message || 'Something went wrong';

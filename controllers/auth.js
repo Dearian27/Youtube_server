@@ -23,7 +23,21 @@ export const signUp = async (req, res, next) => {
     const newUser = new User({ email, password: hashedPassword, name });
     await newUser.save();
 
-    res.status(200).json("user has been created");
+    // res.status(200).json("user has been created");
+
+    const token = jwt.sign(
+      {
+        id: newUser._id,
+      },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: '30d'
+      }
+    )
+
+    res.status(200).json({
+      token, message: "user has been created"
+    })
 
   } catch (error) {
     // res.json({ error: error.message });
@@ -49,11 +63,25 @@ export const signIn = async (req, res, next) => {
       return next(createError(400, "wrong credentials"));
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-    const { userPassword, ...other } = user._doc;
-    res.cookie("access_token", token, {
-      httpOnly: true,
-    }).status(200).json(other);
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: '30d'
+      }
+    )
+      console.log(token)
+    res.status(200).json({
+      token
+    })
+
+    // const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
+    // const { userPassword, ...other } = user._doc;
+    // res.cookie("access_token", token, {
+      // httpOnly: true,
+    // }).status(200).json(other);
 
   } catch (error) {
     next(error);
@@ -79,12 +107,25 @@ export const signInGoogle = async (req, res, next) => {
       const savedUser = await newUser.save();
 
       
-      const token = jwt.sign({ id: savedUser._id }, process.env.SECRET_KEY);
-      res.cookie("access_token", token, {
-        httpOnly: true,
+      const token = jwt.sign(
+        {
+          id: savedUser._id,
+        },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: '30d'
+        }
+      )
+  
+      res.status(200).json({
+        token
       })
-      .status(200)
-      .json(savedUser._doc);
+      // const token = jwt.sign({ id: savedUser._id }, process.env.SECRET_KEY);
+      // res.cookie("access_token", token, {
+      //   httpOnly: true,
+      // })
+      // .status(200)
+      // .json(savedUser._doc);
     }
   }catch(error) {
     next(error)
