@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/signup', signUp);
 
 //Sign in
-router.post('/signIn', signIn);
+router.post('/signin', signIn);
 
 // Sign in with Google account
 router.post('/google', signInGoogle);

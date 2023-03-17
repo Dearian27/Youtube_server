@@ -63,25 +63,25 @@ export const signIn = async (req, res, next) => {
       return next(createError(400, "wrong credentials"));
     }
 
-    const token = jwt.sign(
-      {
-        id: user._id,
-      },
-      process.env.SECRET_KEY,
-      {
-        expiresIn: '30d'
-      }
-    )
-      console.log(token)
-    res.status(200).json({
-      token, user
-    })
+    // const token = jwt.sign(
+    //   {
+    //     id: user._id,
+    //   },
+    //   process.env.SECRET_KEY,
+    //   {
+    //     expiresIn: '30d'
+    //   }
+    // )
+    //   console.log(token)
+    // res.status(200).json({
+    //   token, user
+    // })
 
-    // const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-    // const { userPassword, ...other } = user._doc;
-    // res.cookie("access_token", token, {
-      // httpOnly: true,
-    // }).status(200).json(other);
+    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
+    const { userPassword, ...other } = user._doc;
+    res.cookie("access_token", token, {
+      httpOnly: true,
+    }).status(200).json(other);
 
   } catch (error) {
     next(error);
@@ -93,7 +93,6 @@ export const signInGoogle = async (req, res, next) => {
     const user = await User.findOne({ email:req.body.email, name:req.body.name});
     if(user) {
       const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-      
       res.cookie("access_token", token, {
         httpOnly: true,
       })

@@ -4,6 +4,9 @@ import { createError } from '../error.js';
 
 export const addVideo = async (req, res, next) => {
   try {
+    if(!req.user) {
+      return res.status(401).json({message: 'You are not authorized'});
+    }
     const newVideo = new Video({ ...req.body, userId: req.user.id });
     const savedVideo = await newVideo.save();
     res.status(200).json(savedVideo);
