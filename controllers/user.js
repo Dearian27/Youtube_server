@@ -88,23 +88,12 @@ export const like = async (req, res, next) => {
   console.log(req.user.id);
   const id = req.user.id;
   const videoId = req.params.id;
-  try {
-    // const video = Video.findById(videoId);
-    // console.log(video);
-    // if(video.likes.includes(id)) {   
-      // await Video.findByIdAndUpdate(videoId, {
-        // $pull: { likes: id }
-      // })
-    // } else {
-      
+  try {   
       await Video.findByIdAndUpdate(videoId, {
         $addToSet: { likes: id },
         $pull: { dislikes: id }
       })
-      // }
-      console.log("LIKING SUCCESS")
-    res.status(200)
-    // .json("liked successfull");
+    res.status(200).json({message: "liked successfull"});
   } catch (error) {
     next(error)
   }
@@ -119,8 +108,7 @@ export const dislike = async (req, res, next) => {
       $addToSet: { dislikes: id },
       $pull: { likes: id }
     })
-    res.status(200)
-    // .json("disliked successfull");
+    res.status(200).json({message: "disliked successfull"});
   } catch (error) {
     next(error)
   }

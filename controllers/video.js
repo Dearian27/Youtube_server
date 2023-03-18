@@ -136,8 +136,6 @@ export const getByTags = async (req, res, next) => {
 
 export const search = async (req, res, next) => {
   const query = req.query.query;
-  console.log("req.query.q", req.query.query)
-  console.log("req.query", req.query)
   try {
     const videos = await Video.find({ title: { $regex: query, $options: 'i' } }).limit(30);
     res.status(200).json(videos);

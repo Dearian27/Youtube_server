@@ -9,11 +9,13 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 const app = express();
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:8800'],
-  credentials: true
-  
+  origin: 'http://localhost:5173',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
+  
 dotenv.config();
 
 const connect = () => {
@@ -23,9 +25,9 @@ const connect = () => {
     throw err;
   })
 }
-mongoose.set('strictQuery', true);
-app.use(cookieParser());
+mongoose.set('strictQuery', false);
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/api/users', userRoute);
 app.use('/api/comments', commentRoute);

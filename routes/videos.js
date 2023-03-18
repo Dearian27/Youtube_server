@@ -15,7 +15,7 @@ router.put('/view/:id', addView);
 router.get('/find/:id', getVideo);
 router.get('/random', random);
 router.get('/trend', trend);
-router.get('/sub', cors(), verifyToken, sub);
+router.get('/sub', verifyToken, sub);
 router.get('/tags', getByTags);
 router.get('/search', search);
 // router.post('/', verifyToken, addVideo);
