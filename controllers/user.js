@@ -3,7 +3,7 @@ import User from '../models/User.js';
 import Video from '../models/Video.js';
 
 export const updateUser = async (req, res, next) => {
-  if (req.params.id === req.user._id) {
+  if (req.params.id === req.user.id) {
     try {
       const updatedUser = await User.findByIdAndUpdate(req.user.id,
         { $set: req.body },
@@ -25,7 +25,7 @@ export const updateUser = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
   if (req.params.id === req.user.id) {
     try {
-      await User.findByIdAndDelete(req.user._id);
+      await User.findByIdAndDelete(req.user.id);
       res.status(200).json({ message: "User has been deleted" });
     }
     catch (err) {
@@ -51,8 +51,8 @@ export const getUser = async (req, res, next) => {
 
 export const subscribe = async (req, res, next) => {
   try {
-    const subscribedUser = await User.findById(req.user._id);
-    const isSubscribed = subscribedUser?.subscribedUsers?.find(user => user === req.params.id);
+    const user = await User.findById(req.params.id);
+    const isSubscribed = user?.subscribedUsers?.find(user => user === req.user.id);
     if (isSubscribed || req.user.id === req.params.id) {
       //? cannot subscribe to yourself or secondly
       return next(createError(403, "You do not have permission to subscribe"));
@@ -63,6 +63,7 @@ export const subscribe = async (req, res, next) => {
     await User.findByIdAndUpdate(req.params.id, {
       $inc: { subscribers: 1 },
     })
+    console.log("sub")
     res.status(200).json("Subscribtion successfull");
   } catch (error) {
     next(error);
@@ -77,6 +78,7 @@ export const unsubscribe = async (req, res, next) => {
     await User.findByIdAndUpdate(req.params.id, {
       $inc: { subscribers: -1 }
     })
+    console.log("unsub")
     res.status(200).json("Unsubscribtion successfull");
   } catch (error) {
     next(error);
