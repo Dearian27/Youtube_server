@@ -13,10 +13,10 @@ export const addComment = async (req, res, next) => {
 }
 
 
-export const getComment = async (req, res, next) => {
+export const getComments = async (req, res, next) => {
   try {
-    const comment = await Comment.findById(req.params.id)
-    res.status(200).json(comment);
+    const comments = await Comment.find({videoId:req.params.id})
+    res.status(200).json(comments);
   } catch (error) {
     next(error);
   }

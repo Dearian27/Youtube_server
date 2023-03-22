@@ -63,7 +63,6 @@ export const subscribe = async (req, res, next) => {
     await User.findByIdAndUpdate(req.params.id, {
       $inc: { subscribers: 1 },
     })
-    console.log("sub")
     res.status(200).json("Subscribtion successfull");
   } catch (error) {
     next(error);
@@ -78,7 +77,6 @@ export const unsubscribe = async (req, res, next) => {
     await User.findByIdAndUpdate(req.params.id, {
       $inc: { subscribers: -1 }
     })
-    console.log("unsub")
     res.status(200).json("Unsubscribtion successfull");
   } catch (error) {
     next(error);
