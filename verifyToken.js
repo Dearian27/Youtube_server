@@ -7,7 +7,6 @@ export const verifyToken = (req, res, next) => {
   
     jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
     if (err) return next(createError(403, "Token verification failed"));
-    console.log("user: ", user);
     req.user = user;
     next();
   })
