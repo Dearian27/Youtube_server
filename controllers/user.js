@@ -61,7 +61,7 @@ export const subscribe = async (req, res, next) => {
       $push: { subscribedUsers: req.params.id }
     })
     await User.findByIdAndUpdate(req.params.id, {
-      $inc: { subscribers: 1 },
+      $addToSet: { subscribers: req.user.id }
     })
     res.status(200).json("Subscribtion successfull");
   } catch (error) {
@@ -75,7 +75,7 @@ export const unsubscribe = async (req, res, next) => {
       $pull: { subscribedUsers: req.params.id }
     })
     await User.findByIdAndUpdate(req.params.id, {
-      $inc: { subscribers: -1 }
+      $pull: { subscribers: req.user.id }
     })
     res.status(200).json("Unsubscribtion successfull");
   } catch (error) {
@@ -84,8 +84,6 @@ export const unsubscribe = async (req, res, next) => {
 }
 
 export const like = async (req, res, next) => {
-  console.log(req.user);
-  console.log(req.user.id);
   const id = req.user.id;
   const videoId = req.params.id;
   try {   

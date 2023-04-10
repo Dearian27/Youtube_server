@@ -99,12 +99,14 @@ export const signInGoogle = async (req, res, next) => {
         httpOnly: true,
       })
       .status(200)
-      .json(user._doc);
+      .json({user: user._doc});
+      console.log("false")
     } else {
       const newUser = new User({
         ...req.body,
         fromGoogle: true,
       })
+      console.log(newUser)
       const savedUser = await newUser.save();
 
       
