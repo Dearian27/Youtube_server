@@ -36,7 +36,7 @@ export const signUp = async (req, res, next) => {
     )
 
     res.status(200).json({
-      token, user, message: "user has been created"
+      token, newUser, message: "user has been created"
     })
 
   } catch (error) {

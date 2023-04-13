@@ -14,4 +14,4 @@ router.post('/google', signInGoogle);
 
 //Google authentication
 
-export default router; 
+export default router;
