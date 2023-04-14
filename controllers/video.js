@@ -133,6 +133,20 @@ export const getByTags = async (req, res, next) => {
   }
 }
 
+export const getBySpecialTag = async (req, res, next) => {
+  console.log("fdsfsd")
+  // const specialTag = req.body;
+  const specialTag = "Music";
+  console.log("specialTag", specialTag);
+  try {
+    const videos = await Video.find({ tags: { $in: specialTag } }).sort({ views: -1 }).limit(20);
+    res.status(200).json(videos);
+  }
+  catch (error) {
+    next(error);
+  }
+}
+
 
 export const search = async (req, res, next) => {
   const query = req.query.query;
