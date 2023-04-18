@@ -13,7 +13,7 @@ router.get('/find/:id', getVideo);
 router.get('/random', random);
 router.get('/trend', trend);
 router.get('/sub', verifyToken, sub);
-router.get('/tags', getByTags);
+router.post('/tags', getByTags);
 router.post('/special', getBySpecialTag);
 router.get('/search', search);
 
