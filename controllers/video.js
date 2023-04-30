@@ -41,7 +41,6 @@ export const updateVideo = async (req, res, next) => {
 export const deleteVideo = async (req, res, next) => {
   try {
     const video = await Video.findById(req.params.id);
-
     if (!video) {
       return next(createError("Video not found."));
     }
