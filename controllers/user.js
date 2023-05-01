@@ -65,7 +65,7 @@ export const subscribe = async (req, res, next) => {
       $push: { subscribedUsers: req.params.id }
     })
     await User.findByIdAndUpdate(req.params.id, {
-      $addToSet: { subscribers: req.user.id }
+      $push: { subscribers: req.user.id }
     })
     res.status(200).json("Subscribtion successfull");
   } catch (error) {
