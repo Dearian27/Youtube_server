@@ -115,3 +115,17 @@ export const dislike = async (req, res, next) => {
     next(error)
   }
 }
+
+export const clearReactions = async (req, res, next) => {
+  const id = req.user.id;
+  const videoId = req.params.id;
+  try {
+    await Video.findByIdAndUpdate(videoId, {
+      $pull: { dislikes: id },
+      $pull: { likes: id }
+    })
+    res.status(200).json({message: "cleared successfull"});
+  } catch (error) {
+    next(error)
+  }
+}

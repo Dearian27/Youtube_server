@@ -1,5 +1,5 @@
 import express from 'express';
-import { updateUser, deleteUser, unsubscribe, subscribe, getUser, like, dislike } from '../controllers/user.js';
+import { updateUser, deleteUser, unsubscribe, subscribe, getUser, like, dislike, clearReactions } from '../controllers/user.js';
 import { verifyToken } from '../verifyToken.js';
 
 const router = express.Router();
@@ -24,6 +24,8 @@ router.put("/like/:id", verifyToken, like)
 
 // Dislike a video
 router.put("/dislike/:id", verifyToken, dislike)
+
+router.put("/clear/:id", verifyToken, clearReactions)
 
 
 export default router; 
