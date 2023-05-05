@@ -7,19 +7,15 @@ import videoRoute from './routes/videos.js';
 import authRoute from './routes/auth.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
 const app = express();
 app.use(express.json());
-
 app.use(cors({
   // origin: [process.env.CORS_ORIGIN, process.env.CORS_ORIGIN_LOCAL],
   origin: process.env.CORS_ORIGIN,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-}));
-  
+})); 
 dotenv.config();
-
 const connect = () => {
   mongoose.connect(process.env.MONGO).then(() => {
     console.log('Connected to MongoDB');
@@ -29,12 +25,10 @@ const connect = () => {
 }
 mongoose.set('strictQuery', false);
 app.use(cookieParser());
-
 app.use('/api/users', userRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/videos', videoRoute);
 app.use('/api/auth', authRoute);
-
 app.use((error, req, res, next) => {
   const status = error.status || 500;
   const message = error.message || 'Something went wrong';
@@ -44,7 +38,6 @@ app.use((error, req, res, next) => {
     message,
   })
 })
-
 app.listen(process.env.PORT, () => {
   connect();
   console.log(`Server is running on port ${process.env.PORT}`);

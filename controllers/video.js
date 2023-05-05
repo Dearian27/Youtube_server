@@ -144,7 +144,6 @@ export const search = async (req, res, next) => {
   const query = req.query.q;
   console.log("query", query);
   try {
-    // const videos = await Video.find({ title: { $regex: query, $options: 'i' } }).limit(30);
     const videos = await Video.find({ title: { $regex: new RegExp(query, "i") } }).limit(30);
     res.status(200).json(videos);
   } catch (error) {

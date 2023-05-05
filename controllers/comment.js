@@ -5,9 +5,7 @@ import { createError } from '../error.js';
 export const addComment = async (req, res, next) => {
   try {
     const comment = new Comment({ userId: req.user.id, videoId: req.params.id, ...req.body })
-    console.log(comment)
     await comment.save();
-    console.log('SUCCESS')
     res.status(200).json(comment);
   } catch (error) {
     console.log("error adding the comment: ", error)
@@ -28,7 +26,6 @@ export const getComments = async (req, res, next) => {
 
 export const deleteComment = async (req, res, next) => {
   try {
-    // videoId, userId, text
     const comment = await Comment.findById(req.params.id);
     const video = await Video.findById(req.params.id)
     if (comment.userId === req.user.id || video.userId === req.user.id) {

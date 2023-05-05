@@ -1,10 +1,8 @@
 import express from 'express';
 import { addVideo, updateVideo, deleteVideo, sub, addView, trend, random, getVideo, getByTags, search, getBySpecialTag } from '../controllers/video.js';
 import { verifyToken } from '../verifyToken.js';
-
 const router = express.Router();
 //  route: /api/videos
-
 router.post('/', verifyToken, addVideo);
 router.put('/:id', verifyToken, updateVideo);
 router.delete('/:id', verifyToken, deleteVideo);
@@ -16,5 +14,4 @@ router.get('/sub', verifyToken, sub);
 router.post('/tags', getByTags);
 router.post('/special', getBySpecialTag);
 router.get('/search', search);
-
 export default router; 
