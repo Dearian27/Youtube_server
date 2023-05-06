@@ -74,16 +74,10 @@ export const addView = async (req, res, next) => {
   }
 }
 export const getPending = async (req, res, next) => {
-  console.log(req.user);
   const user = await User.findById(req.user.id);
-  console.log(user);
-  if(user) {
     if (!user?.isAdmin) {
       res.status(403).json("You don't have permission, because you are not an admin.");
     }
-  }else {
-    res.status(403).json("You don't have permission");
-  }
   try {
     const videos = await Video.find({status: "pending"});
     res.status(200).json(videos);
