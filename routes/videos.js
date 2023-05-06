@@ -1,5 +1,5 @@
 import express from 'express';
-import { addVideo, updateVideo, deleteVideo, sub, addView, trend, random, getVideo, getByTags, search, getBySpecialTag, getPending } from '../controllers/video.js';
+import { addVideo, updateVideo, deleteVideo, sub, addView, trend, random, getVideo, getByTags, search, getBySpecialTag, getPending, approveVideo } from '../controllers/video.js';
 import { verifyToken } from '../verifyToken.js';
 const router = express.Router();
 //route: /api/videos
@@ -9,6 +9,7 @@ router.delete('/:id', verifyToken, deleteVideo);
 router.put('/view/:id', addView);
 router.get('/find/:id', getVideo);
 router.get('/pending', getPending);
+router.put('/approve', approveVideo);
 router.get('/random', random);
 router.get('/trend', trend);
 router.get('/sub', verifyToken, sub);
