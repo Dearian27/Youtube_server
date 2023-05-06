@@ -74,6 +74,7 @@ export const addView = async (req, res, next) => {
   }
 }
 export const getPending = async (req, res, next) => {
+  console.log(req.user);
   if(req.user) {
     if (req.user.isAdmin) {
     }else {
