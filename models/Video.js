@@ -37,6 +37,10 @@ const VideoSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  status: {
+    type: String,
+    default: "pending",
+  }
 },
   {
     timestamps: true

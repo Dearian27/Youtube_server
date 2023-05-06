@@ -7,7 +7,7 @@ export const addVideo = async (req, res, next) => {
     if(!req.user) {
       return res.status(401).json({message: 'You are not authorized'});
     }
-    const newVideo = new Video({ ...req.body, userId: req.user.id });
+    const newVideo = new Video({ ...req.body, userId: req.user.id, status: "pending" });
     const savedVideo = await newVideo.save();
     res.status(200).json(savedVideo);
   } catch (error) {
@@ -93,7 +93,7 @@ export const random = async (req, res, next) => {
 
 export const trend = async (req, res, next) => {
   try {
-    const videos = await Video.find().sort({ views: -1 });
+    const videos = await Video.find({status: "approved"}).sort({ views: -1 });
     res.status(200).json(videos);
   } catch (error) {
     next(error);
@@ -108,7 +108,7 @@ export const sub = async (req, res, next) => {
 
     const list = await Promise.all(
       subscribedChannels.map((channelId) => {
-        return Video.find({ userId: channelId })
+        return Video.find({ userId: channelId, status: "approved" })
       })
     )
     res.status(200).json(list.flat().sort((a, b) => b.createdAt - a.createdAt));
@@ -121,7 +121,7 @@ export const getByTags = async (req, res, next) => {
   const {videoId} = req.body;
   const tags = req.query.tags.split(",");
   try {
-    const videos = await Video.find({ tags: { $in: tags }, _id: { $ne: videoId } }).limit(20);
+    const videos = await Video.find({ status: "approved", tags: { $in: tags }, _id: { $ne: videoId } }).limit(20);
     res.status(200).json(videos);
   } catch (error) {
     next(error);
@@ -131,7 +131,7 @@ export const getByTags = async (req, res, next) => {
 export const getBySpecialTag = async (req, res, next) => {
   const {specialTag} = req.body;
   try {
-    const videos = await Video.find({ tags: { $in: specialTag } }).sort({ views: -1 }).limit(20);
+    const videos = await Video.find({ status: "approved", tags: { $in: specialTag } }).sort({ views: -1 }).limit(20);
     res.status(200).json(videos);
   }
   catch (error) {
