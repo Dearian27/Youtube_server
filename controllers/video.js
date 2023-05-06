@@ -36,12 +36,13 @@ export const updateVideo = async (req, res, next) => {
   }
 }
 export const deleteVideo = async (req, res, next) => {
+  const user = await User.findById(req.user.id);
   try {
     const video = await Video.findById(req.params.id);
     if (!video) {
       return next(createError("Video not found."));
     }
-    if (req.user.id === video.userId) {
+    if (req.user.id === video.userId || user?.isAdmin) {
       await Video.findByIdAndDelete(req.params.id);
       res.status(200).json("Video has been deleted successfully.");
     }
@@ -97,7 +98,7 @@ export const approveVideo = async (req, res, next) => {
 }
 export const random = async (req, res, next) => {
   try {
-    const videos = await Video.aggregate([{ $sample: { size: 12 } }]);
+    const videos = await Video.aggregate([{$match:{status:"approved"}},{$sample:{size:12}}]);
     res.status(200).json(videos);
   } catch (error) {
     next(error);
