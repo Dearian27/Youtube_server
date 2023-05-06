@@ -74,6 +74,7 @@ export const addView = async (req, res, next) => {
   }
 }
 export const getPending = async (req, res, next) => {
+  console.log("user", req.user)
   console.log("isAdmin", req.user?.isAdmin)
   if (!req?.user?.isAdmin) {
     res.status(403).json("You don't have permission, because you are not an admin.");
