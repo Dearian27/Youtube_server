@@ -74,7 +74,12 @@ export const addView = async (req, res, next) => {
   }
 }
 export const getPending = async (req, res, next) => {
-  if (!req.user?.isAdmin) {
+  if(req.user) {
+    if (!req.user.isAdmin) {
+      res.status(403).json("You don't have permission");
+    }  
+  }
+  else {
     res.status(403).json("You don't have permission");
   }
   try {
