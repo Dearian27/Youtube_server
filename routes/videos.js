@@ -9,7 +9,7 @@ router.delete('/:id', verifyToken, deleteVideo);
 router.put('/view/:id', addView);
 router.get('/find/:id', getVideo);
 router.get('/pending', getPending);
-router.put('/approve', approveVideo);
+router.put('/approve/:id', approveVideo);
 router.get('/random', random);
 router.get('/trend', trend);
 router.get('/sub', verifyToken, sub);

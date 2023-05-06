@@ -85,9 +85,8 @@ export const getPending = async (req, res, next) => {
   }
 }
 export const approveVideo = async (req, res, next) => {
-  const videoId = req.body;
   try {
-    await Video.findByIdAndUpdate(videoId, {
+    await Video.findByIdAndUpdate(req.params.id, {
       status: "approved",
     });
     res.status(200).json("The video has been approved.");
