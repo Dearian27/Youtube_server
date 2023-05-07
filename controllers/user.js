@@ -51,7 +51,7 @@ export const getUser = async (req, res, next) => {
 export const subscribe = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
-    const isSubscribed = user?.subscribedUsers?.find(userId => userId === req.user.id);
+    const isSubscribed = user?.subscribers?.find(userId => userId === req.user.id);
     if (isSubscribed || req.user.id === req.params.id) {
       //? cannot subscribe to yourself or secondly
       if(isSubscribed) {
@@ -61,9 +61,9 @@ export const subscribe = async (req, res, next) => {
       }
     }
     await User.findByIdAndUpdate(req.user.id, {
-      $addToSet: { subscribedUsers: user._id }
+      $addToSet: { subscribedUsers: req.params.id }
     })
-    await User.findByIdAndUpdate(user._id, {
+    await User.findByIdAndUpdate(req.params.id, {
       $addToSet: { subscribers: req.user.id }
     })
     res.status(200).json("Subscribtion successfull");
