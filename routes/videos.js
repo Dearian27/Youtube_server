@@ -1,5 +1,5 @@
 import express from 'express';
-import { addVideo, updateVideo, deleteVideo, sub, addView, trend, random, getVideo, getByTags, search, getBySpecialTag, getPending, approveVideo } from '../controllers/video.js';
+import { addVideo, updateVideo, deleteVideo, sub, addView, trend, random, getVideo, getByTags, search, getBySpecialTag, getPending, approveVideo, getYourVideos } from '../controllers/video.js';
 import { verifyToken } from '../verifyToken.js';
 const router = express.Router();
 //route: /api/videos
