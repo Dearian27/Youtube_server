@@ -51,19 +51,19 @@ export const getUser = async (req, res, next) => {
 export const subscribe = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
-    const isSubscribed = user?.subscribedUsers?.find(user => user === req.user.id);
+    const isSubscribed = user?.subscribedUsers?.find(userId => userId === req.user.id);
     if (isSubscribed || req.user.id === req.params.id) {
       //? cannot subscribe to yourself or secondly
       if(isSubscribed) {
         return next(createError(418, "You have already subscribed"));
       } else {
-        return next(createError(418, "You do not have permission to subscribe on your channel"));
+        return next(createError(403, "You do not have permission to subscribe on your channel"));
       }
     }
     await User.findByIdAndUpdate(req.user.id, {
-      $addToSet: { subscribedUsers: req.params.id }
+      $addToSet: { subscribedUsers: user._id }
     })
-    await User.findByIdAndUpdate(req.params.id, {
+    await User.findByIdAndUpdate(user._id, {
       $addToSet: { subscribers: req.user.id }
     })
     res.status(200).json("Subscribtion successfull");
@@ -98,7 +98,6 @@ export const like = async (req, res, next) => {
     next(error)
   }
 }
-
 
 export const dislike = async (req, res, next) => {
   const id = req.user.id;
