@@ -157,7 +157,6 @@ export const getBySpecialTag = async (req, res, next) => {
 }
 export const search = async (req, res, next) => {
   const query = req.query.q;
-  console.log("query", query);
   try {
     const videos = await Video.find({ title: { $regex: new RegExp(query, "i") } }).limit(30);
     res.status(200).json(videos);
