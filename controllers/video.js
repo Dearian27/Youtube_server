@@ -42,11 +42,7 @@ export const deleteVideo = async (req, res, next) => {
     if (!video) {
       return next(createError("Video not found."));
     }
-    if(user?.isAdmin) {
-      const video = await Video.findByIdAndDelete(req.params.id);
-      res.status(200).json(video);
-    }
-    else if (req.user.id === video.userId) {
+    else if (req.user.id === video.userId || user?.isAdmin) {
       await Video.findByIdAndDelete(req.params.id);
       res.status(200).json("Video has been deleted successfully.");
     }
@@ -74,6 +70,14 @@ export const addView = async (req, res, next) => {
       $inc: { views: 1 }
     });
     res.status(200).json("The view has been incremented.");
+  } catch (error) {
+    next(error);
+  }
+}
+export const getYourVideos = async (req, res, next) => {
+  try {
+    const videos = await Video.find({userId: req.user.id});
+    res.status(200).json(videos);
   } catch (error) {
     next(error);
   }

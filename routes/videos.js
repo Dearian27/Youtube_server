@@ -8,6 +8,7 @@ router.put('/:id', verifyToken, updateVideo);
 router.delete('/:id', verifyToken, deleteVideo);
 router.put('/view/:id', addView);
 router.get('/find/:id', getVideo);
+router.get('/your', getYourVideos);
 router.get('/pending', verifyToken, getPending);
 router.put('/approve/:id', verifyToken, approveVideo);
 router.get('/random', random);
