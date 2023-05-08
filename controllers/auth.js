@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import { createError } from '../error.js';
@@ -74,13 +73,11 @@ export const signInGoogle = async (req, res, next) => {
       })
       .status(200)
       .json({user: user._doc});
-      console.log("false")
     } else {
       const newUser = new User({
         ...req.body,
         fromGoogle: true,
       })
-      console.log(newUser)
       const savedUser = await newUser.save();   
       const token = jwt.sign(
         {

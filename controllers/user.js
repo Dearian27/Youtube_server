@@ -5,12 +5,12 @@ import Video from '../models/Video.js';
 export const updateUser = async (req, res, next) => {
   if (req.params.id === req.user.id) {
     try {
-      const updatedUser = await User.findByIdAndUpdate(req.user.id,
-        { $set: req.body },
+      const updatedUser = await User.findByIdAndUpdate(
+        req.user.id,
+        {$set: { ...req.body, isAdmin: false }},
         { new: true }
       )
       await updatedUser.save();
-
       res.status(200).json(updatedUser);
     }
     catch (err) {
@@ -48,18 +48,19 @@ export const getUser = async (req, res, next) => {
     next(error);
   }
 }
+
 export const subscribe = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.id);
-    const isSubscribed = user?.subscribers?.find(userId => userId === req.user.id);
-    if (isSubscribed || req.user.id === req.params.id) {
-      //? cannot subscribe to yourself or secondly
-      if(isSubscribed) {
-        return next(createError(418, "You have already subscribed"));
-      } else {
-        return next(createError(403, "You do not have permission to subscribe on your channel"));
-      }
+  const user = await User.findById(req.params.id);
+  const isSubscribed = user?.subscribers?.find(userId => userId === req.user.id);
+  if (isSubscribed || req.user.id === req.params.id) {
+    //? cannot subscribe to yourself or secondly
+    if(isSubscribed) {
+      return next(createError(418, "You have already subscribed"));
+    } else {
+      return next(createError(403, "You do not have permission to subscribe on your channel"));
     }
+  }
+  try {
     await User.findByIdAndUpdate(req.user.id, {
       $addToSet: { subscribedUsers: req.params.id }
     })
@@ -71,6 +72,7 @@ export const subscribe = async (req, res, next) => {
     next(error);
   }
 }
+
 export const unsubscribe = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {

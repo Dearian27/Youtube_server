@@ -13,7 +13,6 @@ export const addComment = async (req, res, next) => {
   }
 }
 
-
 export const getComments = async (req, res, next) => {
   try {
     const comments = await Comment.find({videoId:req.params.id})
@@ -22,7 +21,6 @@ export const getComments = async (req, res, next) => {
     next(error);
   }
 }
-
 
 export const deleteComment = async (req, res, next) => {
   try {
