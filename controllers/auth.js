@@ -12,7 +12,7 @@ export const signUp = async (req, res, next) => {
     }
     const isDublicatedName = await User.findOne({ name });
     if (isDublicatedName) {
-      res.json({ error: 'This username is alreasy used', reason: "name" });
+      res.status(400).json({ error: 'This username is alreasy used', reason: "name" });
     }
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
