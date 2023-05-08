@@ -6,14 +6,13 @@ import jwt from 'jsonwebtoken';
 export const signUp = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-
     const isSignedUp = await User.findOne({ email });
     if (isSignedUp) {
-      return res.status(400).json({ error: 'User already exists' });
+      return res.status(400).json({ error: 'User already exists', reason: "user" });
     }
     const isDublicatedName = await User.findOne({ name });
     if (isDublicatedName) {
-      res.json({ error: 'This username is alreasy used' });
+      res.json({ error: 'This username is alreasy used', reason: "name" });
     }
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
