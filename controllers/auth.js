@@ -22,8 +22,8 @@ export const signUp = async (req, res, next) => {
     const { userPassword, ...other } = user._doc;
     res.cookie("access_token", token, {
       httpOnly: true,
-      sameSite: 'lax',
-      // secure: true
+      sameSite: 'none',
+      secure: false
     }).status(200).json({
       token,
       newUser,
@@ -57,8 +57,8 @@ export const signIn = async (req, res, next) => {
     const { userPassword, ...other } = user._doc;
     res.cookie("access_token", token, {
       httpOnly: true,
-      sameSite: 'lax',
-      // secure: true
+      sameSite: 'none',
+      secure: false
     }).status(200).json(other);
   } catch (error) {
     next(error);
@@ -72,8 +72,8 @@ export const signInGoogle = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
       return res.cookie("access_token", token, {
         httpOnly: true,
-        sameSite: 'lax',
-        // secure: true
+        sameSite: 'none',
+        secure: false
       })
       .status(200)
       .json({user: user._doc});
