@@ -18,10 +18,17 @@ export const signUp = async (req, res, next) => {
     const hashedPassword = bcrypt.hashSync(password, salt);
     const newUser = new User({ email, password: hashedPassword, name });
     await newUser.save();
-    const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY)
-    res.status(200).json({
-      token, newUser, message: "user has been created"
-    })
+    const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY);
+    const { userPassword, ...other } = user._doc;
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      // secure: true
+    }).status(200).json({
+      token,
+      newUser,
+      message: "user has been created"
+    });
   } catch (error) {
     next(createError(404, "not found"));
   }
@@ -51,7 +58,7 @@ export const signIn = async (req, res, next) => {
     res.cookie("access_token", token, {
       httpOnly: true,
       sameSite: 'lax',
-      secure: true
+      // secure: true
     }).status(200).json(other);
   } catch (error) {
     next(error);
@@ -66,7 +73,7 @@ export const signInGoogle = async (req, res, next) => {
       return res.cookie("access_token", token, {
         httpOnly: true,
         sameSite: 'lax',
-        secure: true
+        // secure: true
       })
       .status(200)
       .json({user: user._doc});
