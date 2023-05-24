@@ -61,6 +61,7 @@ export const signInGoogle = async (req, res, next) => {
     const user = await User.findOne({ email:req.body.email, name:req.body.name});
     if(user) {
       const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
+      console.log(token)
       res.status(200).json({user: user._doc, token});
     } 
     const newUser = new User({
@@ -70,7 +71,7 @@ export const signInGoogle = async (req, res, next) => {
     const savedUser = await newUser.save();   
     const token = jwt.sign({ id: savedUser._id }, process.env.SECRET_KEY)
     res.status(200).json({
-      token, user: savedUser
+      user: savedUser, token
     })
   }catch(error) {
     next(error)
