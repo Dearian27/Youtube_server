@@ -4,5 +4,5 @@ import { verifyToken } from '../verifyToken.js';
 const router = express.Router();
 router.post('/:id', verifyToken, addComment);
 router.delete('/:id', verifyToken, deleteComment);
-router.get('/:id', verifyToken, getComments);
+router.get('/:id', getComments);
 export default router; 
