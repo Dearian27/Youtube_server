@@ -52,13 +52,13 @@ export const getUser = async (req, res, next) => {
 export const subscribe = async (req, res, next) => {
   const user = await User.findById(req.params.id);
   const isSubscribed = user?.subscribers?.find(userId => userId === req.user.id);
-  if (isSubscribed || req.user.id === req.params.id) {
-    //? cannot subscribe to yourself or secondly
-    if(isSubscribed) {
-      return next(createError(418, "You have already subscribed"));
-    } else {
-      return next(createError(403, "You do not have permission to subscribe on your channel"));
-    }
+  if (req.user.id === req.params.id) {
+    //? cannot subscribe to yourself
+    return next(createError(403, "You do not have permission to subscribe on your channel"));
+  }
+  if(isSubscribed) {
+    //? cannot subscribe secondly
+    return next(createError(418, "You have already subscribed"));
   }
   try {
     await User.findByIdAndUpdate(req.user.id, {

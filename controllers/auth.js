@@ -19,14 +19,10 @@ export const signUp = async (req, res, next) => {
     const newUser = new User({ email, password: hashedPassword, name });
     await newUser.save();
     const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY);
-    const { userPassword, ...other } = user._doc;
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: false
-    }).status(200).json({
+    const { userPassword, ...other } = newUser._doc;
+    res.status(200).json({
       token,
-      newUser,
+      user: other,
       message: "user has been created"
     });
   } catch (error) {
@@ -52,14 +48,9 @@ export const signIn = async (req, res, next) => {
       res.status(400).json({reason: "password"});
       return next(createError(400, "wrong credentials"));
     }
-    console.log("user", user._id)
     const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
     const { userPassword, ...other } = user._doc;
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: false
-    }).status(200).json(other);
+    res.status(200).json({user: other, token});
   } catch (error) {
     next(error);
   }
@@ -70,13 +61,7 @@ export const signInGoogle = async (req, res, next) => {
     const user = await User.findOne({ email:req.body.email, name:req.body.name});
     if(user) {
       const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-      return res.cookie("access_token", token, {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: false
-      })
-      .status(200)
-      .json({user: user._doc});
+      res.status(200).json({user: user._doc, token});
     } 
     const newUser = new User({
       ...req.body,
