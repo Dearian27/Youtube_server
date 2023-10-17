@@ -38,7 +38,6 @@ export const signIn = async (req, res, next) => {
       return res.status(400).json({ error: 'Please provide name and password', reason: "email"});
     }
     const user = await User.findOne({ email });
-    console.log(email, user.name)
     if (!user) {
       res.status(400).json({reason: "email"});
       return next(createError(404, "not found"));
@@ -61,7 +60,6 @@ export const signInGoogle = async (req, res, next) => {
     const user = await User.findOne({ email:req.body.email, name:req.body.name});
     if(user) {
       const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-      console.log("token", token);
       res.status(200).json({user: user._doc, token});
     } 
     const newUser = new User({
@@ -69,8 +67,7 @@ export const signInGoogle = async (req, res, next) => {
       fromGoogle: true,
     })
     const savedUser = await newUser.save();   
-    const token = jwt.sign({ id: savedUser._id }, process.env.SECRET_KEY)
-    console.log({user: savedUser, token});
+    const token = jwt.sign({ id: savedUser._id }, process.env.SECRET_KEY);
     res.status(200).json({
       user: savedUser, token
     })
